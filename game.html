@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mini Juego - Adivina el Número</title>
+<link rel="stylesheet" href="style.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4287146849301985"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="menu">
+    <a href="index.html">Contador</a>
+    <a href="game.html">Juego</a>
+    <a href="password.html">Generar Contraseña</a>
+    <a href="time.html">Cronómetro / Temporizador</a>
+</nav>
+
+<div class="card">
+<h2 class="title">Adivina el Número</h2>
+<p>Estoy pensando en un número del 1 al 20. ¿Puedes adivinarlo?</p>
+
+
+<input id="guess" type="number" min="1" max="20" class="btn" placeholder="Tu número">
+<button onclick="check()" class="btn click">Comprobar</button>
+
+
+<p id="msg"></p>
+<button onclick="resetGame()" class="btn reset">Reiniciar Juego</button>
+</div>
+
+
+<script>
+let secret = Math.floor(Math.random() * 20) + 1;
+function check() {
+const guess = Number(document.getElementById("guess").value);
+const msg = document.getElementById("msg");
+if (!guess) return msg.textContent = "Ingresa un número válido";
+if (guess === secret) msg.textContent = "🎉 ¡Correcto!";
+else if (guess < secret) msg.textContent = "Muy bajo";
+else msg.textContent = "Muy alto";
+}
+function resetGame() {
+secret = Math.floor(Math.random()*20)+1;
+document.getElementById("msg").textContent = "";
+document.getElementById("guess").value = "";
+}
+</script>
+</body>
+</html>
