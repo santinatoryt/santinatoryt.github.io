@@ -1,0 +1,408 @@
+/* Fondo gamer */
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #0a0a0f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #00eaff;
+    transition: 0.3s;
+}
+
+/* Tema claro */
+body.light {
+    background: #ececec;
+    color: #111;
+}
+
+/* =====================================
+   MENÚ DE NAVEGACIÓN ENTRE PÁGINAS
+   ===================================== */
+.menu {
+    position: absolute;
+    top: 70px;
+    display: flex;
+    gap: 15px;
+    padding: 10px 20px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 2px solid #00eaff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00eaff;
+    backdrop-filter: blur(6px);
+    z-index: 999;
+}
+
+.menu a {
+    color: #00eaff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.menu a:hover {
+    text-shadow: 0 0 10px #00eaff;
+    transform: scale(1.1);
+}
+
+/* Tema claro menú */
+body.light .menu {
+    background: #ddd;
+    border-color: #333;
+    box-shadow: 0 0 10px #666;
+}
+
+body.light .menu a {
+    color: #000;
+}
+
+/* Tarjetas generales */
+.card {
+    text-align: center;
+    padding: 40px;
+    border-radius: 20px;
+    background: rgba(20, 20, 35, 0.65);
+    box-shadow: 0 0 25px #00eaff;
+    border: 2px solid #00eaff;
+    transition: 0.3s;
+}
+
+body.light .card {
+    background: #ffffffcc;
+    border-color: #333;
+    box-shadow: 0 0 20px #888;
+}
+
+/* Títulos */
+.title {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px #00eaff;
+}
+
+/* Contadores */
+.contador {
+    font-size: 80px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px #00f0ff;
+    transition: transform 0.2s;
+}
+
+/* Contadores cronómetro y temporizador */
+#cronometro, #temp {
+    font-size: 60px;
+}
+
+/* Animación normal al subir 1 */
+.anim-subida {
+    transform: scale(1.25);
+    text-shadow: 0 0 25px #00fff2;
+}
+
+/* Animación META (múltiplos de 10) */
+.anim-meta {
+    animation: metaFlash 0.8s ease-out;
+}
+
+@keyframes metaFlash {
+    0% {
+        transform: scale(1);
+        color: #00eaff;
+    }
+    20% {
+        transform: scale(1.5);
+        color: #ff00ff;
+        text-shadow: 0 0 25px #ff00ff;
+    }
+    40% {
+        transform: scale(1.2);
+        color: #00ff62;
+        text-shadow: 0 0 25px #00ff62;
+    }
+    60% {
+        transform: scale(1.4);
+        color: #ffea00;
+        text-shadow: 0 0 30px #ffea00;
+    }
+    100% {
+        transform: scale(1);
+        color: #00eaff;
+    }
+}
+
+/* Botones */
+.btn {
+    padding: 15px 35px;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    margin: 10px;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.click {
+    background: #00eaff;
+    color: #000;
+    box-shadow: 0 0 20px #00eaff;
+}
+
+.click:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #00eaff;
+}
+
+.reset {
+    background: #ff2e63;
+    color: white;
+    box-shadow: 0 0 20px #ff2e63;
+}
+
+.reset:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #ff2e63;
+}
+
+body.light .click {
+    background: #0077ff;
+    color: white;
+}
+
+body.light .reset {
+    background: #ff0000;
+}
+
+/* Inputs globales */
+input[type="number"],
+input[type="text"] {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 18px;
+    margin: 10px auto;
+    outline: none;
+    text-align: center;
+    background: #111;
+    color: #00eaff;
+    box-shadow: 0 0 15px #00eaff;
+}
+
+body.light input {
+    background: #ddd;
+    color: #000;
+    box-shadow: 0 0 10px #666;
+}
+
+/* Texto resultados */
+#msg, #resultado {
+    font-size: 24px;
+    text-shadow: 0 0 10px #00ffff;
+    margin-top: 15px;
+}
+
+/* Interruptor de tema */
+.toggle-container {
+    position: absolute;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-text {
+    font-size: 14px;
+}
+
+.switch {
+    position: relative;
+    width: 50px;
+    height: 25px;
+}
+
+.switch input {
+    opacity: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: #444;
+    border-radius: 25px;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .3s;
+}
+
+input:checked + .slider {
+    background-color: #00eaff;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Canvas fireworks */
+#fireworksCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Separadores */
+hr {
+    border: 1px solid #00eaff;
+    width: 80%;
+}
+
+/* =====================================
+   ESTILO EXTRA PARA EL JUEGO 2D
+   ===================================== */
+
+/* Canvas principal (game) */
+canvas#game {
+    border: 3px solid #00eaff;
+    border-radius: 15px;
+    background: linear-gradient(180deg, #071017 0%, #0e131a 100%);
+    margin-top: 20px;
+    box-shadow: 0 8px 40px rgba(0, 234, 255, 0.18);
+    max-width: 90%;
+    height: auto;
+    display: block;
+}
+
+/* HUD: contenedor de puntuación y vidas */
+.hud {
+    width: 500px;
+    max-width: 90%;
+    margin: 10px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Texto Puntuación y Vidas */
+#scoreText, #lifeText {
+    font-size: 18px;
+    background: rgba(0,0,0,0.35);
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,234,255,0.15);
+    box-shadow: 0 0 12px rgba(0,234,255,0.06);
+    text-shadow: 0 0 8px rgba(0,234,255,0.3);
+}
+
+/* Estético para el texto cuando pierdes/ganas */
+#scoreText.gameover {
+    background: rgba(255,0,0,0.12);
+    border-color: rgba(255,0,0,0.3);
+    text-shadow: 0 0 12px rgba(255,0,0,0.35);
+}
+
+/* Corazones (vidas) */
+.hearts {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.heart {
+    width: 26px;
+    height: 26px;
+    display: inline-block;
+    background: linear-gradient(180deg,#ff5c7a 0%,#ff2e63 100%);
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(255,46,99,0.25), inset 0 -3px 6px rgba(0,0,0,0.15);
+    position: relative;
+}
+.heart:before, .heart:after {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    background: inherit;
+    border-radius: 50%;
+    top: -12px;
+    left: 0;
+}
+.heart:after { left: 12px; }
+
+/* Corazón vacío (vida perdida) */
+.heart.empty {
+    background: linear-gradient(180deg,#333 0%,#222 100%);
+    box-shadow: none;
+}
+.heart.empty:before, .heart.empty:after { background: inherit; }
+
+/* Botón reiniciar específico */
+#resetBtn {
+    margin-top: 12px;
+    padding: 10px 18px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    background: #00eaff;
+    color: #001;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,234,255,0.16);
+}
+#resetBtn:hover { transform: translateY(-3px); }
+
+/* Indicadores flotantes para pequeñas alertas */
+.toast {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: bold;
+    display: none;
+}
+
+/* Estilos para los diferentes tipos de asteroides (solo referencia visual fuera del canvas) */
+.asteroid.large   { background: linear-gradient(180deg,#8a3b3b,#6f2b2b); width:45px; height:45px; border-radius:50%; box-shadow: 0 6px 18px rgba(0,0,0,0.5);}
+.asteroid.medium  { background: linear-gradient(180deg,#c45a5a,#9f3f3f); width:32px; height:32px; border-radius:50%;}
+.asteroid.small   { background: linear-gradient(180deg,#ff9b9b,#ff7a7a); width:18px; height:18px; border-radius:50%;}
+
+/* Pequeñas animaciones para cuando el jugador recibe daño */
+.hit-flash {
+    animation: hitFlash 0.4s ease-out;
+}
+@keyframes hitFlash {
+    0% { box-shadow: 0 0 25px rgba(255,0,0,0.8); transform: scale(1.03); }
+    100% { box-shadow: none; transform: scale(1); }
+}
+
+/* Responsive: reducir HUD en pantallas pequeñas */
+@media (max-width: 560px) {
+    .hud { flex-direction: column; gap: 8px; align-items: center; }
+    #scoreText, #lifeText { font-size: 16px; padding: 6px 10px; }
+    .hearts { gap: 6px; }
+}
+
+/* Accesibilidad: focus visible para botones */
+.btn:focus, #resetBtn:focus, .menu a:focus {
+    outline: 3px solid rgba(0,234,255,0.25);
+    outline-offset: 3px;
+}
