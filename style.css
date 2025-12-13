@@ -1,0 +1,239 @@
+/* Fondo gamer */
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #0a0a0f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    color: #00eaff;
+    transition: 0.3s;
+    padding-top: 160px; /* 👈 espacio para menú + toggle */
+}
+/* Tema claro */
+body.light { 
+    background: #ececec;
+    color: #111;
+}  
+/* ===================================== 
+MENÚ DE NAVEGACIÓN ENTRE PÁGINAS
+ ===================================== */ 
+.menu {
+    position: fixed;
+    top: 80px;
+    display: flex;
+    gap: 15px;
+    padding: 10px 20px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 2px solid #00eaff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00eaff;
+    backdrop-filter: blur(6px);
+    z-index: 999;
+}
+
+
+.menu a {
+    color: #00eaff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.2s;
+} 
+     
+.menu a:hover {
+    text-shadow: 0 0 10px #00eaff; 
+    transform: scale(1.1); 
+} 
+
+/* Tema claro menú */ 
+body.light .menu { 
+    background: #ddd; 
+    border-color: #333; 
+    box-shadow: 0 0 10px #666; 
+} 
+
+body.light .menu a {
+     color: #000; 
+} 
+    
+/* Tarjetas generales */ 
+.card {
+    text-align: center; 
+    padding: 40px; 
+    border-radius: 20px; 
+    background: rgba(20, 20, 35, 0.65); 
+    box-shadow: 0 0 25px #00eaff; 
+    border: 2px solid #00eaff; 
+    transition: 0.3s; 
+} 
+
+body.light .card { 
+    background: #ffffffcc; 
+    border-color: #333; 
+    box-shadow: 0 0 20px #888; 
+} 
+
+/* Títulos */ 
+
+.title { 
+    font-size: 32px; 
+    margin-bottom: 20px; 
+    text-shadow: 0 0 15px #00eaff; 
+} 
+
+/* Botones */ 
+.btn { 
+    padding: 15px 35px; 
+    font-size: 20px; 
+    cursor: pointer; 
+    border: none; 
+    border-radius: 12px; 
+    margin: 10px; 
+    transition: 0.2s; 
+} 
+
+.click {
+     background: #00eaff; 
+     color: #000; box-shadow: 0 0 20px #00eaff;
+} 
+
+.click:hover { 
+    transform: scale(1.1); 
+    box-shadow: 0 0 30px #00eaff; 
+} 
+
+.reset {
+    background: #ff2e63; 
+    color: white; 
+    box-shadow: 0 0 20px #ff2e63;
+} 
+
+.reset:hover {
+    transform: scale(1.1); 
+    box-shadow: 0 0 30px #ff2e63; 
+} 
+
+body.light .click { 
+    background: #0077ff; 
+    color: white; 
+} 
+
+body.light .reset {
+    background: #ff0000; 
+} 
+
+/* Inputs globales */ 
+input[type="number"],
+input[type="text"] {
+    padding: 12px; 
+    border-radius: 10px; 
+    border: none; 
+    font-size: 18px; 
+    margin: 10px auto; 
+    outline: none; 
+    text-align: center; 
+    background: #111; 
+    color: #00eaff; 
+    box-shadow: 0 0 15px #00eaff; 
+} 
+
+body.light input {
+    background: #ddd; 
+    color: #000; 
+    box-shadow: 0 0 10px #666; 
+} 
+
+/* Texto resultados */ 
+#msg, #resultado { 
+    font-size: 24px; 
+    text-shadow: 0 0 10px #00ffff; 
+    margin-top: 15px; 
+} 
+
+/* Interruptor de tema */ 
+.toggle-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.toggle-text { 
+    font-size: 14px;
+} 
+
+.switch {
+    position: relative; 
+    width: 50px; 
+    height: 25px; 
+} 
+
+.switch input {
+    opacity: 0; 
+} 
+
+.slider {
+    position: absolute; 
+    cursor: pointer; 
+    background-color: #444; 
+    border-radius: 25px; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    transition: .3s; 
+} 
+
+.slider:before {
+    position: absolute;
+    content: ""; 
+    height: 19px; 
+    width: 19px; 
+    left: 3px; 
+    bottom: 3px; 
+    background-color: white; 
+    border-radius: 50%; 
+    transition: .3s; 
+} 
+
+input:checked + .slider {
+    background-color: #00eaff;
+} 
+
+input:checked + .slider:before {
+    transform: translateX(24px); 
+} 
+
+/* ===================================== 
+ESTILO PARA EL JUEGO DE LA SERPIENTE 
+===================================== */ 
+#gameBox {
+     text-align: center; 
+     margin-top: 40px; 
+} 
+    canvas {
+    background: #111; 
+    border: 3px solid #00eaff; 
+    border-radius: 10px; 
+    box-shadow: 0 0 25px #00eaff; 
+} 
+
+body.light canvas {
+    background: #f0f0f0; 
+    border-color: #333; 
+    box-shadow: 0 0 15px #888; 
+} 
+
+h1 {
+    text-shadow: 0 0 15px #00eaff; 
+}
+
+p {
+    margin-top: 10px; 
+    font-size: 22px; 
+}
