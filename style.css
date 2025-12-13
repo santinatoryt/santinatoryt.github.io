@@ -1,0 +1,222 @@
+/* Fondo gamer */
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #0a0a0f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #00eaff;
+    transition: 0.3s;
+}
+
+/* Tema claro */
+body.light {
+    background: #ececec;
+    color: #111;
+}
+
+/* ===== MENÚ SUPERIOR NEÓN ===== */
+.menu {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.menu ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 15px 35px;
+    border-radius: 40px;
+    background: rgba(10, 10, 20, 0.8);
+    border: 2px solid #00eaff;
+    box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: #00eaff;
+    font-size: 18px;
+    font-weight: 500;
+    text-shadow: 0 0 10px #00eaff;
+    transition: 0.3s;
+}
+
+.menu ul li a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px #00eaff, 0 0 25px #00eaff;
+}
+
+/* Menú en tema claro */
+body.light .menu ul {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #333;
+    box-shadow: 0 0 20px #999;
+}
+
+body.light .menu ul li a {
+    color: #111;
+    text-shadow: none;
+}
+
+body.light .menu ul li a:hover {
+    color: #0077ff;
+}
+
+/* ===== CARD ===== */
+.card {
+    text-align: center;
+    padding: 40px;
+    border-radius: 20px;
+    background: rgba(20, 20, 35, 0.65);
+    box-shadow: 0 0 25px #00eaff;
+    border: 2px solid #00eaff;
+    transition: 0.3s;
+}
+
+body.light .card {
+    background: #ffffffcc;
+    border-color: #333;
+    box-shadow: 0 0 20px #888;
+}
+
+.title {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px #00eaff;
+}
+
+.contador {
+    font-size: 80px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px #00f0ff;
+    transition: transform 0.2s;
+}
+
+/* Animación normal al subir 1 */
+.anim-subida {
+    transform: scale(1.25);
+    text-shadow: 0 0 25px #00fff2;
+}
+
+/* Animación META (cada múltiplo de 10) */
+.anim-meta {
+    animation: metaFlash 0.8s ease-out;
+}
+
+@keyframes metaFlash {
+    0% { transform: scale(1); color: #00eaff; }
+    20% { transform: scale(1.5); color: #ff00ff; text-shadow: 0 0 25px #ff00ff; }
+    40% { transform: scale(1.2); color: #00ff62; text-shadow: 0 0 25px #00ff62; }
+    60% { transform: scale(1.4); color: #ffea00; text-shadow: 0 0 30px #ffea00; }
+    100% { transform: scale(1); color: #00eaff; }
+}
+
+.btn {
+    padding: 15px 35px;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    margin: 10px;
+    transition: 0.2s;
+}
+
+.click {
+    background: #00eaff;
+    color: #000;
+    box-shadow: 0 0 20px #00eaff;
+}
+
+.click:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #00eaff;
+}
+
+.reset {
+    background: #ff2e63;
+    color: white;
+    box-shadow: 0 0 20px #ff2e63;
+}
+
+.reset:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #ff2e63;
+}
+
+body.light .click {
+    background: #0077ff;
+    color: white;
+}
+
+body.light .reset {
+    background: #ff0000;
+}
+
+.toggle-container {
+    position: absolute;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-text {
+    font-size: 14px;
+}
+
+.switch {
+    position: relative;
+    width: 50px;
+    height: 25px;
+}
+
+.switch input {
+    opacity: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: #444;
+    border-radius: 25px;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .3s;
+}
+
+input:checked + .slider {
+    background-color: #00eaff;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Canvas de fuegos artificiales */
+#fireworksCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
