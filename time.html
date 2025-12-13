@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cronómetro y Temporizador</title>
+<link rel="stylesheet" href="style.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4287146849301985"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="menu">
+  <ul>
+    <li><a href="index.html">Contador</a></li>
+    <li><a href="game.html">Juego</a></li>
+    <li><a href="password.html">Generar contraseñas</a></li>
+    <li><a href="time.html">Temporizador/Cronómetro</a></li>
+  </ul>
+</nav>
+
+<div class="card">
+<h2 class="title">Cronómetro</h2>
+<div id="cronometro" class="contador">00:00:00</div>
+<button onclick="startCrono()" class="btn click">Iniciar</button>
+<button onclick="stopCrono()" class="btn reset">Detener</button>
+<button onclick="resetCrono()" class="btn reset">Reiniciar</button>
+
+<hr style="margin:20px 0; border-color:#00eaff;">
+
+<h2 class="title">Temporizador</h2>
+
+<!-- Inputs para horas, minutos y segundos -->
+<div style="display:flex; gap:10px; justify-content:center; margin-bottom:15px;">
+  <input id="horas" type="number" min="0" class="btn" placeholder="HH">
+  <input id="minutos" type="number" min="0" max="59" class="btn" placeholder="MM">
+  <input id="segundos" type="number" min="0" max="59" class="btn" placeholder="SS">
+</div>
+
+<div id="temp" class="contador">00:00:00</div>
+
+<button onclick="startTemp()" class="btn click">Iniciar</button>
+<button onclick="stopTemp()" class="btn reset">Detener</button>
+<button onclick="resetTemp()" class="btn reset">Reiniciar</button>
+</div>
+
+<script>
+// ===== CRONÓMETRO =====
+let cronoInterval;
+let cronoSegundos = 0;
+
+function startCrono() {
+  clearInterval(cronoInterval);
+  cronoInterval = setInterval(() => {
+    cronoSegundos++;
+    let h = Math.floor(cronoSegundos / 3600);
+    let m = Math.floor((cronoSegundos % 3600) / 60);
+    let s = cronoSegundos % 60;
+    document.getElementById("cronometro").textContent =
+      String(h).padStart(2,"0") + ":" +
+      String(m).padStart(2,"0") + ":" +
+      String(s).padStart(2,"0");
+  }, 1000);
+}
+
+function stopCrono() {
+  clearInterval(cronoInterval);
+}
+
+function resetCrono() {
+  clearInterval(cronoInterval);
+  cronoSegundos = 0;
+  document.getElementById("cronometro").textContent = "00:00:00";
+}
+
+// ===== TEMPORIZADOR =====
+let tempInterval;
+let totalSegundos = 0;
+
+function startTemp() {
+  if (totalSegundos === 0) {
+    const h = parseInt(document.getElementById("horas").value) || 0;
+    const m = parseInt(document.getElementById("minutos").value) || 0;
+    const s = parseInt(document.getElementById("segundos").value) || 0;
+    totalSegundos = h*3600 + m*60 + s;
+  }
+
+  if (totalSegundos <= 0) return;
+
+  clearInterval(tempInterval);
+  tempInterval = setInterval(() => {
+    totalSegundos--;
+
+    let horas = Math.floor(totalSegundos / 3600);
+    let minutos = Math.floor((totalSegundos % 3600) / 60);
+    let segundos = totalSegundos % 60;
+
+    document.getElementById("temp").textContent =
+      String(horas).padStart(2,"0") + ":" +
+      String(minutos).padStart(2,"0") + ":" +
+      String(segundos).padStart(2,"0");
+
+    if (totalSegundos <= 0) {
+      clearInterval(tempInterval);
+      document.getElementById("temp").textContent = "⏰ FIN ⏰";
+    }
+  }, 1000);
+}
+
+function stopTemp() {
+  clearInterval(tempInterval);
+}
+
+function resetTemp() {
+  clearInterval(tempInterval);
+  totalSegundos = 0;
+  document.getElementById("temp").textContent = "00:00:00";
+  document.getElementById("horas").value = "";
+  document.getElementById("minutos").value = "";
+  document.getElementById("segundos").value = "";
+}
+</script>
+
+</body>
+</html>
