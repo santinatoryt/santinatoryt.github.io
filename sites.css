@@ -1,0 +1,284 @@
+:root {
+    --color-naranja: #fbbf24;
+    --color-fondo: #0f172a;
+    --color-pared: #334155;
+    --node-size: 80px;
+}
+
+body {
+    background-color: var(--color-fondo);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* --- ENLACES BONITOS PRO --- */
+a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    padding: 2px 4px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+a::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    background: linear-gradient(120deg, transparent, rgba(251, 191, 36, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background: var(--color-naranja);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+a:hover {
+    color: var(--color-naranja);
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+}
+
+a:hover::before {
+    opacity: 1;
+}
+
+a:hover::after {
+    width: 100%;
+}
+
+a:active {
+    transform: scale(0.92);
+}
+
+
+/* --- MENÚ --- */
+#menuView,
+.levels-container {
+    display: flex;
+    left: 50%;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.level-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 800px;
+}
+
+.node,
+.level-node {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    border: 4px solid rgba(255,255,255,0.1);
+    font-size: 1.2rem;
+}
+
+.node.locked,
+.level-node.locked {
+    background: #334155;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.node.current,
+.level-node.current {
+    background: #3b82f6;
+    border-color: #60a5fa;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+}
+
+.node.completed,
+.level-node.completed {
+    background: #10b981;
+    border-color: #34d399;
+}
+
+.level-node:hover:not(.locked),
+.node:hover:not(.locked) {
+    transform: scale(1.1);
+}
+
+/* --- JUEGO --- */
+#gameView {
+    display: none;
+    padding: 20px;
+    height: 100vh;
+    position: relative;
+    justify-content: center;
+}
+
+.game-layout {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 80vh;
+    margin-top: 30px;
+}
+
+#gridContainer {
+    display: grid;
+    gap: 12px;
+    position: relative;
+    background: rgba(255,255,255,0.03);
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.grid-linear { grid-template-columns: repeat(4, var(--node-size)); }
+.grid-3x3 { grid-template-columns: repeat(3, var(--node-size)); }
+.grid-7x3 { grid-template-columns: repeat(7, var(--node-size)); }
+.grid-5x4 { grid-template-columns: repeat(5, var(--node-size)); }
+
+.path-node {
+    width: var(--node-size);
+    height: var(--node-size);
+    border-radius: 12px;
+    background: #1e293b;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.path-node.cian { border: 2px solid #22d3ee; }
+.path-node.pink { border: 2px solid #f472b6; }
+.path-node.green { border: 2px solid #4ade80; }
+
+.path-node.wall { background: var(--color-pared); }
+.path-node.death { border: 2px solid #ef4444; background: #450a0a; }
+.path-node.target { border: 2px solid #10b981; background: #064e3b; }
+.path-node.button { border: 2px solid var(--color-naranja); background: #78350f; }
+.path-node.door-closed { border: 2px solid #ef4444; background: #1e1b4b; }
+.path-node.door-open { border: 2px solid #10b981; background: #064e3b; }
+.path-node.ice { border: 2px solid #3b82f6; background: #1e3a8a; }
+.path-node.portal { border: 2px solid #a855f7; border-radius: 50%; background: #4c1d95; }
+
+/* --- PLAYER --- */
+#player {
+    width: var(--node-size);
+    height: var(--node-size);
+    position: absolute;
+    border-radius: 10px;
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#player-inner {
+    width: 75%;
+    height: 75%;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.on-cian { background-color: #22d3ee; box-shadow: 0 0 20px #22d3ee; }
+.on-pink { background-color: #f472b6; box-shadow: 0 0 20px #f472b6; }
+.on-green { background-color: #4ade80; box-shadow: 0 0 20px #4ade80; }
+.finished { background-color: white !important; }
+
+/* --- PANEL DE CÓDIGO --- */
+.code-panel {
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    min-width: 300px;
+    border-left: 5px solid #3b82f6;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.indent { margin-left: 20px; }
+.code-if { color: var(--color-naranja); font-weight: bold; }
+.code-reat { color: #a855f7; font-weight: bold; }
+.code-while { color: #f87171; font-weight: bold; }
+.code-func { color: #60a5fa; }
+
+/* --- BOTONES Y TOAST --- */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255,255,255,0.1);
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+#toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3b82f6;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 50px;
+    display: none;
+    z-index: 1000;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
+
+.tick-icon {
+    width: 30px;
+    height: 30px;
+}
+
+#mundo-2 {
+
+    top: 51%;
+    left: 63%;
+
+}
+
+#mundo-1 {
+
+    top: 51.5%;
+    left: 24%;
+
+}
+.grid-6x5 {
+    display: grid;
+    grid-template-columns: repeat(6, var(--node-size));
+    grid-template-rows: repeat(5, var(--node-size));
+    gap: 20px;
+    padding: 20px;
+}

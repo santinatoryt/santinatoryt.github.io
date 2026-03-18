@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Lógica - Niveles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="sites.css">
+</head>
+<body>
+    <a id="mundo-2" href="pagina2.html">mundo 2</a>
+
+    <div id="toast"></div>
+
+    <div class="levels-container" id="menuView">
+        <h1 class="text-4xl font-bold mb-10 text-slate-400">LOGIC GAME</h1>
+        <div id="levelsWrapper"></div>
+    </div>
+
+    <div id="gameView">
+        <button class="back-btn" onclick="showMenu()">← Menú</button>
+        <div id="levelTitle" class="absolute top-6 right-10 text-slate-300 font-bold text-2xl uppercase">Nivel</div>
+
+        <div class="game-layout">
+            <div id="gridWrapper" style="position: relative;">
+                <div id="gridContainer"></div>
+            </div>
+            <div class="code-panel" id="codePanel"></div>
+        </div>
+    </div>
+
+    <script>
+        const levelData = {
+            0: {
+                title: "NIVEL 0",
+                type: "grid-linear",
+                start: { x: 0, y: 0 },
+                spacing: 115,
+                steps: ["ArrowRight", "ArrowRight", "ArrowRight"],
+                code: ["derecha()", "derecha()", "derecha()"],
+                nodes: Array.from({length: 4}, (_, i) => ({ x: i, y: 0, color: "cian" }))
+            },
+            1: {
+                title: "NIVEL 1",
+                type: "grid-3x3",
+                start: { x: 1, y: 1 },
+                spacing: 115,
+                steps: ["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown", "ArrowRight"],
+                code: ["izquierda()", "arriba()", "derecha()", "abajo()", "derecha()"],
+                nodes: [
+                    { x: 0, y: 0, color: "pink" }, { x: 1, y: 0, color: "pink" }, { x: 2, y: 0, color: "cian" },
+                    { x: 0, y: 1, color: "pink" }, { x: 1, y: 1, color: "pink" }, { x: 2, y: 1, color: "cian" },
+                    { x: 0, y: 2, color: "cian" }, { x: 1, y: 2, color: "cian" }, { x: 2, y: 2, color: "cian" }
+                ]
+            },
+            2: {
+                title: "NIVEL 2",
+                type: "grid-3x3",
+                start: { x: 1, y: 1 },
+                spacing: 115,
+                steps: ["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowLeft", "ArrowUp"],
+                code: [
+                    "derecha()",
+                    "abajo()",
+                    "<span class='code-reat'>repítelo</span> (2) {",
+                    "<div class='indent'>izquierda()</div>",
+                    "}",
+                    "arriba()"
+                ],
+                nodes: [
+                    { x: 0, y: 0, color: "cian" }, { x: 1, y: 0, color: "cian" }, { x: 2, y: 0, color: "pink" },
+                    { x: 0, y: 1, color: "pink" }, { x: 1, y: 1, color: "pink" }, { x: 2, y: 1, color: "pink" },
+                    { x: 0, y: 2, color: "pink" }, { x: 1, y: 2, color: "cian" }, { x: 2, y: 2, color: "cian" }
+                ]
+            },
+            3: {
+                title: "NIVEL 3",
+                type: "grid-7x3",
+                start: { x: 1, y: 0 },
+                spacing: 115,
+                steps: ["ArrowDown", "ArrowRight", "ArrowRight", "ArrowRight", "ArrowDown"],
+                code: [
+                    "abajo()",
+                     "<span class='code-reat'>repítelo</span> (3) {",
+                    "<span class='code-if'>si</span> 🔴 {",
+                    "<div class='indent'>derecha()</div>",
+                    "}}",
+                    "abajo()"
+                ],
+                nodes: [
+                    { x: 0, y: 0, color: "cian" }, { x: 1, y: 0, color: "cian" }, { x: 2, y: 0, color: "cian" }, { x: 3, y: 0, color: "cian" }, { x: 4, y: 0, color: "cian" }, { x: 5, y: 0, color: "cian" }, { x: 6, y: 0, color: "cian" },
+                    { x: 0, y: 1, color: "pink" }, { x: 1, y: 1, color: "pink" }, { x: 2, y: 1, color: "pink" }, { x: 3, y: 1, color: "pink" }, { x: 4, y: 1, color: "cian" }, { x: 5, y: 1, color: "pink" }, { x: 6, y: 1, color: "cian" },
+                    { x: 0, y: 2, color: "cian" }, { x: 1, y: 2, color: "cian" }, { x: 2, y: 2, color: "cian" }, { x: 3, y: 2, color: "cian" }, { x: 4, y: 2, color: "cian" }, { x: 5, y: 2, color: "pink" }, { x: 6, y: 2, color: "cian" }
+                ]
+            },
+            4: {
+                title: "NIVEL 4",
+                type: "grid-5x4",
+                start: { x: 0, y: 0 },
+                spacing: 115,
+                steps: ["ArrowRight", "ArrowRight", "ArrowRight", "ArrowRight", "ArrowDown", "ArrowDown", "ArrowDown", "ArrowUp", "ArrowLeft", "ArrowUp", "ArrowLeft", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowDown", "ArrowDown"],
+                code: [
+                    "<span class='code-reat'>repítelo</span> (4) {",
+                    "<div class='indent'>derecha()</div>",
+                    "}}",
+                     "<span class='code-reat'>repítelo</span> (4) {",
+                    "<span class='code-if'>si</span> 🔴 {",
+                    "<div class='indent'>abajo()</div>",
+                    "}}",
+                     "<span class='code-reat'>repítelo</span> (4) {",
+                    "<span class='code-if'>si</span> 💚 {",
+                    "<div class='indent'>arriba()</div>",
+                    "<div class='indent'>izquierda()</div>",
+                    "}",
+                    "}",
+                    "<span class='code-reat'>repítelo</span> (3) {",
+                    "<div class='indent'>abajo()</div>",
+                    "}",
+
+                ],
+                nodes: [
+                    { x: 0, y: 0, color: "cian" }, { x: 1, y: 0, color: "cian" }, { x: 2, y: 0, color: "cian" }, { x: 3, y: 0, color: "cian" }, { x: 4, y: 0, color: "pink" },
+                    { x: 0, y: 1, color: "cian" }, { x: 1, y: 1, color: "cian" }, { x: 2, y: 1, color: "green" }, { x: 3, y: 1, color: "cian" }, { x: 4, y: 1, color: "pink" },
+                    { x: 0, y: 2, color: "cian" }, { x: 1, y: 2, color: "cian" }, { x: 2, y: 2, color: "cian" }, { x: 3, y: 2, color: "green" }, { x: 4, y: 2, color: "pink" },
+                    { x: 0, y: 3, color: "cian" }, { x: 1, y: 3, color: "cian" }, { x: 2, y: 3, color: "cian" }, { x: 3, y: 3, color: "cian" }, { x: 4, y: 3, color: "green" }
+                ]
+            },
+            5: {
+    title: "NIVEL 5",
+    type: "grid-6x5",
+    start: { x: 0, y: 0 },
+    spacing: 115,
+    steps: [
+        "ArrowRight","ArrowRight","ArrowRight","ArrowRight","ArrowRight",
+        "ArrowDown","ArrowDown",
+        "ArrowLeft","ArrowLeft",
+        "ArrowDown",
+        "ArrowRight","ArrowRight",
+        "ArrowUp","ArrowUp"
+    ],
+    code: [
+        "<span class='code-reat'>repítelo</span> (5) {",
+        "<div class='indent'>derecha()</div>",
+        "}",
+        "<span class='code-if'>si</span> 🔴 {",
+        "<div class='indent'>abajo()</div>",
+        "<div class='indent'>abajo()</div>",
+        "}",
+        "<span class='code-reat'>repítelo</span> (2) {",
+        "<div class='indent'>izquierda()</div>",
+        "}",
+        "<span class='code-if'>si</span> 💚 {",
+        "<div class='indent'>abajo()</div>",
+        "}",
+        "<span class='code-reat'>repítelo</span> (2) {",
+        "<div class='indent'>derecha()</div>",
+        "}",
+        "<span class='code-if'>si</span> 💙 {",
+        "<div class='indent'>arriba()</div>",
+        "<div class='indent'>arriba()</div>",
+        "}"
+    ],
+    nodes: [
+        // fila 0
+        { x:0,y:0,color:"cian" },{ x:1,y:0,color:"cian" },{ x:2,y:0,color:"cian" },{ x:3,y:0,color:"cian" },{ x:4,y:0,color:"cian" },{ x:5,y:0,color:"pink" },
+
+        // fila 1
+        { x:0,y:1,color:"cian" },{ x:1,y:1,color:"cian" },{ x:2,y:1,color:"green" },{ x:3,y:1,color:"cian" },{ x:4,y:1,color:"cian" },{ x:5,y:1,color:"pink" },
+
+        // fila 2
+        { x:0,y:2,color:"cian" },{ x:1,y:2,color:"cian" },{ x:2,y:2,color:"cian" },{ x:3,y:2,color:"green" },{ x:4,y:2,color:"cian" },{ x:5,y:2,color:"pink" },
+
+        // fila 3
+        { x:0,y:3,color:"cian" },{ x:1,y:3,color:"pink" },{ x:2,y:3,color:"cian" },{ x:3,y:3,color:"cian" },{ x:4,y:3,color:"green" },{ x:5,y:3,color:"cian" },
+
+        // fila 4
+        { x:0,y:4,color:"cian" },{ x:1,y:4,color:"cian" },{ x:2,y:4,color:"cian" },{ x:3,y:4,color:"cian" },{ x:4,y:4,color:"cian" },{ x:5,y:4,color:"green" }
+    ]
+}
+        };
+
+        let userProgress = 0;
+        let activeLevel = 0;
+        let currentPos = { x: 0, y: 0 };
+        let stepIdx = 0;
+        let finished = false;
+
+        const tickSvg = `<svg class="tick-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M25 50L40 65L75 35" stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
+
+        function initMenu() {
+            const wrapper = document.getElementById('levelsWrapper');
+            wrapper.innerHTML = '';
+            
+            // Calculamos cuántas filas necesitamos para 6 niveles (0 a 5)
+            const totalLevels = 6;
+            const rowCount = Math.ceil(totalLevels / 5);
+
+            for(let r=0; r<rowCount; r++) { 
+                const row = document.createElement('div');
+                row.className = 'level-row mb-6';
+                for(let c=0; c<5; c++) {
+                    const i = r*5 + c;
+                    if (i >= totalLevels) break;
+
+                    const btn = document.createElement('div');
+                    btn.className = `node ${i < userProgress ? 'completed' : (i === userProgress ? 'current' : 'locked')}`;
+                    btn.innerHTML = i < userProgress ? tickSvg : (i <= userProgress ? i : '🔒');
+                    if(i <= userProgress) btn.onclick = () => startLevel(i);
+                    row.appendChild(btn);
+                }
+                wrapper.appendChild(row);
+            }
+        }
+
+        function startLevel(n) {
+            activeLevel = n;
+            const lvl = levelData[n];
+            if(!lvl) return;
+            document.getElementById('levelTitle').innerText = lvl.title;
+            document.getElementById('menuView').style.display = 'none';
+            document.getElementById('gameView').style.display = 'block';
+            const worldLink = document.getElementById('mundo-2');
+            if (worldLink) worldLink.style.display = 'none';
+
+            const container = document.getElementById('gridContainer');
+            container.className = lvl.type;
+            container.innerHTML = '';
+
+            lvl.nodes.forEach(node => {
+                const d = document.createElement('div');
+                d.className = `path-node ${node.color}`;
+                container.appendChild(d);
+            });
+
+            const player = document.createElement('div');
+            player.id = 'player';
+            container.appendChild(player);
+
+            document.getElementById('codePanel').innerHTML = lvl.code.map(line => `<div>${line}</div>`).join('');
+            
+            resetGame();
+        }
+
+        function resetGame() {
+            const lvl = levelData[activeLevel];
+            currentPos = { ...lvl.start };
+            stepIdx = 0;
+            finished = false;
+            updatePlayerPosition();
+        }
+
+        function updatePlayerPosition() {
+            const lvl = levelData[activeLevel];
+            const p = document.getElementById('player');
+            const grid = document.getElementById('gridContainer');
+            const gridStyle = getComputedStyle(grid);
+
+            const nodeSize = parseInt(gridStyle.getPropertyValue('--node-size')) || 0;
+            const gap = parseInt(gridStyle.getPropertyValue('gap')) || 0;
+            const padLeft = parseInt(gridStyle.getPropertyValue('padding-left')) || 0;
+            const padTop = parseInt(gridStyle.getPropertyValue('padding-top')) || 0;
+
+            const step = nodeSize + gap;
+            p.style.left = `${padLeft + currentPos.x * step}px`;
+            p.style.top = `${padTop + currentPos.y * step}px`;
+
+            const node = lvl.nodes.find(n => n.x === currentPos.x && n.y === currentPos.y);
+            p.classList.remove('on-cian', 'on-pink', 'on-green', 'finished');
+            p.innerHTML = '';
+
+            if(node) {
+                if(node.color === "cian") p.classList.add('on-cian');
+                else if(node.color === "pink") p.classList.add('on-pink');
+                else if(node.color === "green") p.classList.add('on-green');
+            }
+        }
+
+        function handleMove(key) {
+            if(finished || document.getElementById('gameView').style.display === 'none') return;
+            const lvl = levelData[activeLevel];
+
+            if(key === lvl.steps[stepIdx]) {
+                if(key === "ArrowRight") currentPos.x++;
+                if(key === "ArrowLeft") currentPos.x--;
+                if(key === "ArrowUp") currentPos.y--;
+                if(key === "ArrowDown") currentPos.y++;
+                
+                stepIdx++;
+                updatePlayerPosition();
+
+                if(stepIdx === lvl.steps.length) {
+                    finished = true;
+                    const p = document.getElementById('player');
+                    setTimeout(() => {
+                        p.classList.add('finished');
+                        const lastNode = lvl.nodes.find(n => n.x === currentPos.x && n.y === currentPos.y);
+                        
+                        let strokeColor = '#0891b2'; // Default cian
+                        if(lastNode?.color === 'pink') strokeColor = '#db2777';
+                        if(lastNode?.color === 'green') strokeColor = '#16a34a';
+
+                        p.innerHTML = `<svg style="width:100%; height:100%;" viewBox="0 0 100 100" fill="none"><path d="M25 50L40 65L75 35" stroke="${strokeColor}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+                        
+                        if(activeLevel === userProgress) userProgress++;
+                        showToast("¡Excelente!");
+                        setTimeout(showMenu, 1500);
+                    }, 400);
+                }
+            } else if(["ArrowRight","ArrowLeft","ArrowUp","ArrowDown"].includes(key)) {
+                showToast("¡Vuelve a intentarlo!");
+                resetGame();
+            }
+        }
+
+        function showMenu() {
+            document.getElementById('gameView').style.display = 'none';
+            document.getElementById('menuView').style.display = 'flex';
+            const worldLink = document.getElementById('mundo-2');
+            if (worldLink) worldLink.style.display = '';
+            initMenu();
+        }
+
+        window.addEventListener('keydown', (e) => handleMove(e.key));
+        initMenu();
+    </script>
+</body>
+</html>

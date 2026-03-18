@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Master - Professional Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="sites.css">
+</head>
+<body>
+    <a id="mundo-1" href="index.html">mundo 1</a>
+
+    <div id="toast"></div>
+
+    <!-- VISTA MENÚ -->
+    <div id="menuView">
+        <h1 class="text-4xl font-bold tracking-tighter mb-4">LOGIC GAME </h1>
+        <div class="level-row" id="levelsGrid">
+            <!-- Nodos de niveles se generan aquí -->
+        </div>
+        <p class="text-slate-500 text-sm mt-8">Selecciona un nivel para comenzar</p>
+    </div>
+
+    <!-- VISTA JUEGO -->
+    <div id="gameView">
+        <div class="back-btn" onclick="showMenu()">← VOLVER AL MENÚ</div>
+
+        <div class="game-layout" style="justify-content: center; flex-direction: column;">
+            <h2 class="text-2xl font-bold mb-6" id="levelLabel">NIVEL 11</h2>
+            <div id="gridContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        /* ================================================================
+           CONFIGURACIÓN DE NIVELES (Modifica aquí)
+           ================================================================ */
+        const levels = {
+            6: { 
+                size: 3, start: {x:0, y:2}, target: {x:2, y:0}, 
+                desc: "Tutorial básico", gridType: "3x3"
+            },
+            7: { 
+                size: 3, start: {x:0, y:2}, target: {x:2, y:0},
+                death: [{x:1, y:1}], desc: "Evita la muerte"
+            },
+            8: { 
+                size: 4, start: {x:0, y:3}, target: {x:3, y:0},
+                walls: [{x:1, y:3}, {x:1, y:2}, {x:2, y:1}], 
+                death: [{x:1, y:1}],
+                desc: "Laberinto"
+            },
+            9: { 
+                size: 4, start: {x:0, y:0}, target: {x:3, y:3},
+                buttons: [{x:3, y:0, id: 'k14'}],
+                doors: [{x:3, y:2, id: 'k14'}],
+                walls: [ {x:1, y:2}, {x:2, y:2}],
+                death: [{x:0, y:2}],
+                desc: "Interruptor"
+            },
+            10: { 
+                size: 4, start: {x:0, y:3}, target: {x:3, y:0},
+                fakeButtons: [{x:1, y:1, id: 'k15'}], // MURO FALSO
+                doors: [{x:2, y:0, id: 'k15'}],
+                walls: [{x:0, y:1}, {x:2, y:1}, {x:3, y:1}], desc: "Muro Secreto"
+            },
+            11: {
+                size: 5, start: {x:0, y:0}, target: {x:4, y:4},
+                ice: [{x:1, y:0}, {x:1, y:1}, {x:1, y:2}, {x:1, y:3}],
+                death: [{x:2, y:3}, {x:2, y:4}, {x:1, y:4}, {x:0, y:4},],
+                walls: [{x:2, y:2}, {x:2, y:0}, {x:3, y:4}, {x:3, y:3},],
+                fakeButtons: [{x:2, y:1, id: 'k16'}],
+                doors: [{x:4, y:3, id: 'k16'}],
+                desc: "Hielo deslizante" 
+            },
+            12: {
+                size: 5, start: {x:0, y:4}, target: {x:4, y:0},
+                portals: [{x:4, y:4, to: {x:4, y:2}}],
+                fakeButtons: [{x:0, y:2, id: 'k17'}],
+                doors: [{x:4, y:1, id: 'k17'}],
+                walls: [{x:0, y:1}, {x:1, y:1}, {x:2, y:1}, {x:3, y:1}],
+                death: [{x:0, y:3}, {x:1, y:3}, {x:2, y:3}, {x:3, y:3}, {x:4, y:3}],
+                desc: "Teletransporte"
+            },
+            13: {
+                size: 6, start: {x:0, y:5}, target: {x:5, y:0},
+                fakeButtons: [{x:3, y:4, id: 'k18'}],
+                doors: [{x:5, y:1, id: 'k18'}],
+                portals: [{x:4, y:4, to: {x:1, y:2}}],
+                walls: [{x:0, y:4}, {x:1, y:4}, {x:2, y:4}],
+                death: [{x:0, y:1}, {x:1, y:1}, {x:2, y:1}, {x:3, y:1}, {x:4, y:1}, {x:0, y:3}, {x:1, y:3}, {x:2, y:3}, {x:3, y:3}, {x:4, y:3}, {x:4, y:2}],
+                desc: "Desafío ciego"
+            },
+            14: {
+                size: 10, start: {x:1, y:1}, target: {x:8, y:8},
+                fakeButtons: [{x:1, y:8, id: 'k22'}],
+                buttons: [{x:6, y:2, id: 'k23'}],
+                doors: [{x:4, y:3, id: 'k22'}, {x:8, y:7, id: 'k23'}],
+                death: [{x:7, y:4}, {x:8, y:4}, {x:8, y:3},],
+                portals: [{x:6, y:8, to: {x:1, y:1}}, {x:3, y:5, to: {x:7, y:1}}, {x:8, y:1, to: {x:7, y:3}}, {x:5, y:1, to: {x:8, y:6}}],
+                walls: [{x:0, y:0}, {x:7, y:5}, {x:8, y:5}, {x:6, y:3}, {x:6, y:4}, {x:6, y:5}, {x:8, y:2}, {x:7, y:2}, {x:5, y:2}, {x:7, y:7}, {x:3, y:6}, {x:6, y:6}, {x:5, y:6}, {x:4, y:6}, {x:7, y:6}, {x:7, y:8}, {x:2, y:8}, {x:3, y:8}, {x:4, y:8}, {x:5, y:8}, {x:2, y:6}, {x:2, y:5}, {x:2, y:4}, {x:3, y:4}, {x:4, y:4}, {x:4, y:2}, {x:4, y:1}, {x:1, y:2}, {x:2, y:2}, {x:0, y:1}, {x:0, y:2}, {x:0, y:3}, {x:0, y:4}, {x:0, y:5}, {x:0, y:6}, {x:0, y:7}, {x:0, y:8}, {x:0, y:9}, {x:1, y:0}, {x:2, y:0}, {x:3, y:0}, {x:4, y:0}, {x:5, y:0}, {x:6, y:0}, {x:7, y:0}, {x:8, y:0}, {x:9, y:0}, {x:9, y:1}, {x:9, y:2}, {x:9, y:3}, {x:9, y:4}, {x:9, y:5}, {x:9, y:6}, {x:9, y:7}, {x:9, y:8}, {x:9, y:9}, {x:1, y:9}, {x:2, y:9}, {x:3, y:9}, {x:4, y:9}, {x:5, y:9}, {x:6, y:9}, {x:7, y:9}, {x:8, y:9},]
+            },
+            15: {
+                size: 10, start: {x:1, y:1}, target: {x:1, y:8},
+                doors: [{x:2, y:8, id: 'k19'}, {x:4, y:8, id: 'k20'}, {x:4, y:1, id: 'k21'}],
+                fakeButtons: [{x:1, y:6, id: 'k20'}, {x:6, y:7, id: 'k19'}],
+                death: [{x:2, y:1}, {x:7, y:1}, {x:7, y:2}, {x:8, y:2}, {x:5, y:7}],
+                buttons: [{x:3, y:2, id: 'k21'}],
+                portals: [{x:0, y:5, to: {x:3, y:1}}, {x:1, y:2, to: {x:1, y:4}}, {x:8, y:4, to: {x:8, y:7}}, {x:8, y:5, to: {x:8, y:1}}, {x:7, y:8, to: {x:5, y:8}}],
+                walls: [{x:6, y:8}, {x:5, y:6}, {x:6, y:6}, {x:7, y:6}, {x:8, y:6}, {x:6, y:1}, {x:6, y:2}, {x:6, y:3}, {x:7, y:3}, {x:8, y:3}, {x:9, y:1}, {x:9, y:2}, {x:9, y:3}, {x:9, y:4}, {x:9, y:5}, {x:9, y:6}, {x:9, y:7}, {x:9, y:8}, {x:4, y:6}, {x:4, y:5}, {x:4, y:4}, {x:4, y:3}, {x:4, y:2}, {x:3, y:7}, {x:4, y:7}, {x:1, y:3}, {x:1, y:7}, {x:0, y:0}, {x:0, y:1}, {x:0, y:2}, {x:0, y:3}, {x:0, y:4}, {x:0, y:6}, {x:0, y:7}, {x:0, y:8}, {x:0, y:9}, {x:1, y:0}, {x:2, y:0}, {x:3, y:0}, {x:4, y:0}, {x:5, y:0}, {x:6, y:0}, {x:7, y:0}, {x:8, y:0}, {x:9, y:0}, {x:1, y:9}, {x:2, y:9}, {x:3, y:9}, {x:4, y:9}, {x:5, y:9}, {x:6, y:9}, {x:7, y:9}, {x:8, y:9}, {x:9, y:9}, {x:2, y:2}, {x:2, y:3}, {x:2, y:4}, {x:2, y:5}, {x:2, y:6}, {x:2, y:7}],
+            }
+        };
+
+        /* --- MOTOR DEL JUEGO --- */
+        let activeLevel = 6;
+        let currentPos = {x: 0, y: 0};
+        let openDoors = new Set();
+        let isMoving = false;
+        let completedLevels = JSON.parse(localStorage.getItem('logic_master_progress') || '[]');
+
+        const nodeSize = 80;
+        const gridGap = 10;
+        const padding = 15;
+
+        function showMenu() {
+            document.getElementById('gameView').style.display = 'none';
+            document.getElementById('menuView').style.display = 'flex';
+            const worldLink = document.getElementById('mundo-1');
+            if (worldLink) worldLink.style.display = '';
+            renderMenu();
+        }
+
+        function renderMenu() {
+            const grid = document.getElementById('levelsGrid');
+            grid.innerHTML = '';
+            for(let i=6; i<=15; i++) {
+                const node = document.createElement('div');
+                let status = 'locked';
+                if (i === 6 || completedLevels.includes(i - 1)) status = 'current';
+                if (completedLevels.includes(i)) status = 'completed';
+                
+                node.className = `level-node ${status}`;
+                node.innerText = i;
+                node.onclick = () => { if(status !== 'locked') startLevel(i); };
+                grid.appendChild(node);
+            }
+        }
+
+        function startLevel(n) {
+            activeLevel = n;
+            openDoors.clear();
+            const lvl = levels[n];
+            currentPos = {...lvl.start};
+            
+            document.getElementById('menuView').style.display = 'none';
+            document.getElementById('gameView').style.display = 'flex';
+            const worldLink = document.getElementById('mundo-1');
+            if (worldLink) worldLink.style.display = 'none';
+            document.getElementById('levelLabel').innerText = `NIVEL ${n}`;
+            const codeLevelNameEl = document.getElementById('codeLevelName');
+            if (codeLevelNameEl) codeLevelNameEl.innerText = `Level_${n}`;
+            logEvent("Nivel cargado.");
+
+            const container = document.getElementById('gridContainer');
+            container.innerHTML = '';
+            container.style.gridTemplateColumns = `repeat(${lvl.size}, ${nodeSize}px)`;
+            
+            for(let y=0; y<lvl.size; y++) {
+                for(let x=0; x<lvl.size; x++) {
+                    const node = document.createElement('div');
+                    node.className = 'path-node';
+                    node.id = `node-${x}-${y}`;
+                    
+                    if(x === lvl.target.x && y === lvl.target.y) node.classList.add('target'), node.innerHTML = '🏁';
+                    if(lvl.walls?.some(w => w.x === x && w.y === y)) node.classList.add('wall'), node.innerHTML = '🧱';
+                    if(lvl.death?.some(w => w.x === x && w.y === y)) node.classList.add('death'), node.innerHTML = '❌';
+                    if(lvl.fakeButtons?.some(w => w.x === x && w.y === y)) node.classList.add('wall'), node.dataset.fake = "true", node.innerHTML = '🧱';
+                    if(lvl.buttons?.some(w => w.x === x && w.y === y)) node.classList.add('button'), node.innerHTML = '🔘';
+                    if(lvl.doors?.some(w => w.x === x && w.y === y)) node.classList.add('door-closed'), node.innerHTML = '🔒';
+                    if(lvl.ice?.some(w => w.x === x && w.y === y)) node.classList.add('ice'), node.innerHTML = '❄️';
+                    if(lvl.portals?.some(w => w.x === x && w.y === y)) node.classList.add('portal'), node.innerHTML = '🌀';
+                    
+                    container.appendChild(node);
+                }
+            }
+
+            const player = document.createElement('div');
+            player.id = 'player';
+            player.innerHTML = '<div id="player-inner">🤖</div>';
+            container.appendChild(player);
+            updatePlayerVisual();
+        }
+
+        function updatePlayerVisual() {
+            const el = document.getElementById('player');
+            // Cálculo exacto: padding + (pos * (tamaño + gap))
+            el.style.left = `${padding + (currentPos.x * (nodeSize + gridGap))}px`;
+            el.style.top = `${padding + (currentPos.y * (nodeSize + gridGap))}px`;
+        }
+
+        async function handleMove(dx, dy) {
+            if (isMoving) return;
+            const lvl = levels[activeLevel];
+            let nextX = currentPos.x + dx;
+            let nextY = currentPos.y + dy;
+
+            if (nextX < 0 || nextX >= lvl.size || nextY < 0 || nextY >= lvl.size) return;
+
+            const node = document.getElementById(`node-${nextX}-${nextY}`);
+            const isWall = node.classList.contains('wall');
+            const isDoorClosed = node.classList.contains('door-closed');
+            const isFakeWall = node.dataset.fake === "true";
+
+            if ((isWall && !isFakeWall) || isDoorClosed) {
+                logEvent("Colisión detectada.");
+                return;
+            }
+
+            isMoving = true;
+            currentPos.x = nextX;
+            currentPos.y = nextY;
+            updatePlayerVisual();
+
+            // Deslizamiento
+            while (lvl.ice?.some(i => i.x === currentPos.x && i.y === currentPos.y)) {
+                logEvent("Deslizando por hielo...");
+                await new Promise(r => setTimeout(r, 100));
+                let sx = currentPos.x + dx;
+                let sy = currentPos.y + dy;
+                if (sx < 0 || sx >= lvl.size || sy < 0 || sy >= lvl.size) break;
+                const nextNode = document.getElementById(`node-${sx}-${sy}`);
+                if (nextNode.classList.contains('wall') || nextNode.classList.contains('door-closed')) break;
+                currentPos.x = sx;
+                currentPos.y = sy;
+                updatePlayerVisual();
+                if (lvl.death?.some(w => w.x === currentPos.x && w.y === currentPos.y)) break;
+            }
+
+            // Trampa
+            if (lvl.death?.some(w => w.x === currentPos.x && w.y === currentPos.y)) {
+                logEvent("ERROR: Jugador destruido.");
+                showToast("💥 REINICIANDO");
+                await new Promise(r => setTimeout(r, 600));
+                startLevel(activeLevel);
+                isMoving = false;
+                return;
+            }
+
+            // Botones y Muros falsos
+            const allButtons = [...(lvl.buttons || []), ...(lvl.fakeButtons || [])];
+            const btn = allButtons.find(b => b.x === currentPos.x && b.y === currentPos.y);
+            if (btn && !openDoors.has(btn.id)) {
+                openDoors.add(btn.id);
+                logEvent(`Trigger activado: ${btn.id}`);
+                showToast("🔓 PUERTA ABIERTA");
+                const currentTile = document.getElementById(`node-${currentPos.x}-${currentPos.y}`);
+                if(currentTile.dataset.fake) {
+                    currentTile.classList.remove('wall');
+                    currentTile.classList.add('button');
+                    currentTile.innerHTML = '🔘';
+                }
+                lvl.doors.filter(d => d.id === btn.id).forEach(d => {
+                    const dNode = document.getElementById(`node-${d.x}-${d.y}`);
+                    dNode.classList.remove('door-closed');
+                    dNode.classList.add('door-open');
+                    dNode.innerHTML = '🔓';
+                });
+            }
+
+            // Portal
+            const portal = lvl.portals?.find(p => p.x === currentPos.x && p.y === currentPos.y);
+            if (portal) {
+                logEvent("Salto cuántico!");
+                await new Promise(r => setTimeout(r, 150));
+                currentPos = {...portal.to};
+                updatePlayerVisual();
+            }
+
+            // Meta
+            if (currentPos.x === lvl.target.x && currentPos.y === lvl.target.y) {
+                logEvent("¡OBJETIVO ALCANZADO!");
+                showToast("🌟 ¡BIEN HECHO!");
+                if(!completedLevels.includes(activeLevel)) {
+                    completedLevels.push(activeLevel);
+                    localStorage.setItem('logic_master_progress', JSON.stringify(completedLevels));
+                }
+                await new Promise(r => setTimeout(r, 1000));
+                if (activeLevel < 20) startLevel(activeLevel + 1);
+                else showMenu();
+            }
+
+            isMoving = false;
+        }
+
+        function logEvent(msg) {
+            const el = document.getElementById('eventLog');
+            if (el) el.innerText = `> ${msg}`;
+        }
+
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 1500);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
+            switch(e.key) {
+                case 'ArrowUp': handleMove(0, -1); break;
+                case 'ArrowDown': handleMove(0, 1); break;
+                case 'ArrowLeft': handleMove(-1, 0); break;
+                case 'ArrowRight': handleMove(1, 0); break;
+            }
+        });
+
+        window.onload = showMenu;
+    </script>
+</body>
+</html>
