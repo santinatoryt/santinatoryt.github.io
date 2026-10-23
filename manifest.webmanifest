@@ -1,0 +1,12 @@
+{
+  "name": "ÁRBITRO PRO 3D: EL VAR",
+  "short_name": "Árbitro PRO",
+  "description": "Simulador 3D de arbitraje futbolístico con monitor VAR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#071820",
+  "theme_color": "#071820",
+  "icons": []
+}

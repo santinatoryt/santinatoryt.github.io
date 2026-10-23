@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#071c25">
+<meta name="description" content="ÁRBITRO PRO 3D: EL VAR — juego de arbitraje futbolístico 3D">
+<link rel="manifest" href="manifest.webmanifest">
+<title>ÁRBITRO PRO 3D: EL VAR</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loading"><div class="load-title">ÁRBITRO PRO 3D</div><div class="load-bar"><i></i></div><small>Preparando el estadio…</small></div>
+<div id="app">
+  <header class="scorebar">
+    <div class="brand">AP<span>3D</span></div>
+    <div class="score"><span class="teamname">ATLÉTICO NORTE</span><b id="score">0 - 0</b><span class="teamname">UNIÓN SUR</span></div>
+    <div class="clockbox"><b id="clock">00:00</b><small id="period">1.ª PARTE</small></div>
+  </header>
+  <div id="scene-wrap"><canvas id="game"></canvas>
+    <div class="broadcast"><span class="live-dot"></span> EN DIRECTO <span id="camera-label">CÁMARA TV</span></div>
+    <div class="var-chip" id="var-chip">VAR · EN ESPERA</div>
+    <div class="toast" id="toast"></div>
+    <div class="lower-third" id="lower-third"><b>ÁRBITRO PRO 3D</b><span>Dirige el partido. Revisa las jugadas. Decide.</span></div>
+  </div>
+  <section class="controls">
+    <div class="control-row primary">
+      <button data-action="whistle" class="action">🔊 <span>SILBATO</span></button>
+      <button data-action="stop" class="action">⏸ <span>DETENER</span></button>
+      <button data-action="resume" class="action green">▶ <span>REANUDAR</span></button>
+      <button data-action="var" class="action var-button">📺 <span>ABRIR VAR</span></button>
+    </div>
+    <div class="control-row decisions">
+      <button data-action="foul">⚑ <span>FALTA</span></button>
+      <button data-action="yellow">🟨 <span>AMARILLA</span></button>
+      <button data-action="red">🟥 <span>ROJA</span></button>
+      <button data-action="penalty">⚽ <span>PENALTI</span></button>
+      <button data-action="offside">🚩 <span>FUERA DE JUEGO</span></button>
+      <button data-action="corner">↗ <span>CÓRNER</span></button>
+      <button data-action="camera">🎥 <span>CÁMARA</span></button>
+      <button data-action="log">📋 <span>ACTA</span></button>
+    </div>
+  </section>
+</div>
+
+<div class="modal hidden" id="var-modal" role="dialog" aria-modal="true">
+  <div class="modal-card var-card">
+    <div class="modal-head"><div><small>VIDEO ASSISTANT REFEREE</small><h2>MONITOR VAR</h2></div><button class="close" data-close="var-modal">✕</button></div>
+    <div class="replay-view"><canvas id="replay"></canvas><div class="replay-overlay" id="replay-status">REVISIÓN DE JUGADA</div></div>
+    <div class="replay-controls">
+      <button id="prev-frame">◀ −1 fotograma</button><button id="play-replay">▶ Reproducir</button><button id="next-frame">+1 fotograma ▶</button>
+    </div>
+    <div class="replay-controls cameras">
+      <button data-replay-camera="0">Cámara lateral</button><button data-replay-camera="1">Detrás de portería</button><button data-replay-camera="2">Cámara general</button><button id="offside-lines">Líneas de fuera de juego: OFF</button>
+    </div>
+    <p class="hint" id="var-hint">Las repeticiones usan posiciones grabadas durante este partido. Si aún no hay jugada, genera una jugada con “SILBATO” o espera unos segundos.</p>
+    <div class="decision-buttons"><button id="keep-decision">MANTENER DECISIÓN</button><button id="change-decision">CAMBIAR DECISIÓN</button></div>
+  </div>
+</div>
+
+<div class="modal hidden" id="log-modal" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <div class="modal-head"><div><small>INFORME DEL ENCUENTRO</small><h2>ACTA ARBITRAL</h2></div><button class="close" data-close="log-modal">✕</button></div>
+    <div class="stats-grid"><div><small>MARCADOR</small><b id="log-score">0 - 0</b></div><div><small>MINUTO</small><b id="log-minute">0'</b></div><div><small>AMARILLAS</small><b id="yellow-count">0</b></div><div><small>ROJAS</small><b id="red-count">0</b></div></div>
+    <div id="event-list" class="event-list"></div>
+    <button class="wide-button" data-close="log-modal">VOLVER AL PARTIDO</button>
+  </div>
+</div>
+
+<div class="modal hidden" id="menu-modal" role="dialog" aria-modal="true">
+  <div class="modal-card menu-card">
+    <div class="brand-large">ÁRBITRO PRO <span>3D: EL VAR</span></div>
+    <p>Tu partido. Tus decisiones. La última palabra es tuya.</p>
+    <button id="start-game" class="wide-button">JUGAR PARTIDO</button>
+    <button id="training" class="wide-button secondary">ENTRENAMIENTO ARBITRAL</button>
+    <button id="settings" class="wide-button secondary">CONFIGURACIÓN</button>
+    <button id="rules" class="wide-button secondary">REGLAS DEL FÚTBOL</button>
+    <small class="menu-note">Juego independiente · equipos ficticios · simulación de arbitraje</small>
+  </div>
+</div>
+<div class="modal hidden" id="info-modal" role="dialog" aria-modal="true">
+  <div class="modal-card"><div class="modal-head"><div><small>ÁRBITRO PRO 3D</small><h2 id="info-title">INFORMACIÓN</h2></div><button class="close" data-close="info-modal">✕</button></div><div id="info-content" class="info-content"></div><button class="wide-button" data-close="info-modal">VOLVER</button></div>
+</div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
